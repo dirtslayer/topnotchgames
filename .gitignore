@@ -1,0 +1,6 @@
+*.class
+*.jar
+.google_apis/*
+.settings/*
+war/WEB-INF/appengine-generated/*
+
