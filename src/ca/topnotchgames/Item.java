@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,7 +56,12 @@ public class Item implements Serializable {
         if (path==null) {
             throw new XPathException("Stylesheet " + url + " not found");
         }
-        Templates x = (Templates)cache.get(path);
+        //
+        // disable cache
+        
+      //  Templates x = null;
+        
+       Templates x = (Templates)cache.get(path);
         if (x==null) {
             x = factory.newTemplates(new StreamSource(new File(path)));
             cache.put(path, x);
@@ -69,11 +75,11 @@ public class Item implements Serializable {
     @SuppressWarnings("rawtypes")
 	private static HashMap cache = new HashMap(20);
 	
-    public static void printlistXSLT(LinkedList<Item> il, GenericServlet host, ServletOutputStream out, String style) {
+    public static void printlistXSLT(List<Item> il, GenericServlet host, ServletOutputStream out, String style) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<itemlist>");
 		for (Item i:il) {
-			sb.append("" + i );
+			sb.append("" + i.toXML() );
 		}
 		sb.append("</itemlist>");
 		
@@ -110,7 +116,7 @@ public class Item implements Serializable {
 	public static void printlistXML(LinkedList<Item> il, ServletOutputStream os) {
 		try {
 			for (Item i:il) {
-				os.println("" + i );
+				os.println("" + i.toXML() );
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,7 +126,7 @@ public class Item implements Serializable {
 	
 	
 	
-	public String toString() {
+	public String toXML() {
 		return "<item><id>" + id + "</id><group>" + group + "</group><category>" + category + "</category><name>" +
 				name + "</name><price>" + price + "</price><quantity>" + quantity + "</quantity><imageurl>" +
 				imageurl + "</imageurl><notes>" + notes + "</notes></item>";

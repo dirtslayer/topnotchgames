@@ -28,6 +28,7 @@
 <xsl:template match="itemlist/item">
 <tr>
 <td class="category"> <xsl:value-of select="category" /> </td>
+<td class="group"> <xsl:value-of select="group" /> </td>
 <td class="name"> <xsl:value-of select="name" /></td>
 <td class="quantity"> <xsl:value-of select="quantity" /></td>
 <td class="price">$<xsl:value-of select="price" /></td>

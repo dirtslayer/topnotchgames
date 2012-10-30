@@ -17,6 +17,14 @@
 		<url-pattern>/gamefiler</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>catalogue</servlet-name>
+		<servlet-class>ca.topnotchgames.catalogue</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>catalogue</servlet-name>
+		<url-pattern>/catalogue</url-pattern>
+	</servlet-mapping>
 	
 	
 	<welcome-file-list>

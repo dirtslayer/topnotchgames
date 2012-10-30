@@ -19,16 +19,39 @@ public enum Dao {
 	public List<Item> listItems() {
 		synchronized (this) {
 			List<Item> Itemss = null;
+			
+			
+			String key = "listitems";
+
+			LinkedList<Item> serlist = null;
+
+			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+			syncCache.setErrorHandler(ErrorHandlers
+						.getConsistentLogAndContinue(Level.INFO));
+			//serlist = (LinkedList<Item>) syncCache.get(key); // read from cache
+
+			if (serlist != null) {
+					return serlist;
+			}
+
+			
 			try {
 				EntityManager em = EMFService.get().createEntityManager();
 				em.getTransaction().begin();
 				Query q = em.createQuery("select m from Item m");
+				//q.setMaxResults(100);
+				
 				Itemss = (List<Item>) q.getResultList();
 				em.getTransaction().commit();
 				em.close();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+			serlist = new LinkedList<Item>();
+	        for (Item a:Itemss) {
+	                serlist.add(a);
+	        }
+	        syncCache.put(key, serlist); // populate cache
 			return Itemss;
 		}
 	}
