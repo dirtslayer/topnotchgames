@@ -148,10 +148,6 @@
 </xsl:template>	
 	
 <xsl:template match="itemlist/item">
-<tr>
-<td class="name"> <xsl:value-of select="name" /></td>
-<td class="quantity"> <xsl:value-of select="quantity" /></td>
-<td class="price">$<xsl:value-of select="price" /></td>
-</tr>
+<tr><td class="name"><xsl:element name="a"><xsl:attribute name="href">https://www.google.ca/search?q=<xsl:value-of select="name" />&amp;hl=en&amp;prmd=imvns&amp;source=lnms&amp;tbm=isch</xsl:attribute><xsl:value-of select="name" /></xsl:element></td><td class="price">$<xsl:value-of select="price" /></td></tr>
 </xsl:template>
 </xsl:stylesheet>

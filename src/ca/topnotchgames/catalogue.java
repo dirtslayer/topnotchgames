@@ -21,8 +21,9 @@ public class catalogue extends HttpServlet {
 		List<Item> il = Dao.INSTANCE.listItems();
 		
 		// may want to parameterize category and pass that somehow ... 
-		Item.printlistXSLT(il, this, os, "catalogue.xsl");
+		//Item.printlistXSLT(il, this, os, "catalogue.xsl");
 		
+		os.print( Item.xsl(il, this, "catalogue.xsl") );
 		
 	}
 	

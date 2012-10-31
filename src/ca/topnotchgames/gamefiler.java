@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 //appengine
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -79,8 +81,7 @@ public class gamefiler extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		resp.setContentType("text/html");
-
+	
 		ServletOutputStream os = resp.getOutputStream();
 
 		MultipartParser parser = new MultipartParser(req, 1000000);
@@ -143,7 +144,7 @@ public class gamefiler extends HttpServlet {
 			int cend = 0;
 			String col;
 			int coln = 0;
-
+			int quantity = 0;
 			newItem = new Item();
 
 
@@ -160,7 +161,11 @@ public class gamefiler extends HttpServlet {
 				} else if (coln==8) {
 					newItem.setPrice(col);
 				} else if (coln==20) {
-					newItem.setQuantity(col);
+					if  ( 0 < col.length() ) {
+						quantity = Integer.parseInt(col);
+					} else {
+						quantity = 0;
+					}
 				}
 
 				cstart = cend + 1;
@@ -168,8 +173,10 @@ public class gamefiler extends HttpServlet {
 				if ( cstart >= line.length()) break;
 
 			} // end loop column
-
-			itemlist.add(newItem);
+			
+			if (quantity > 0) {
+				itemlist.add(newItem);
+			}
 
 			if (start >= lines.length()) break;
 		} // end loop input lines
@@ -177,10 +184,13 @@ public class gamefiler extends HttpServlet {
 
 		//Item.printlistXML(itemlist, os);
 		
-		Item.printlistXSLT(itemlist, this, os, "/itemlist.xsl");
-		Dao.INSTANCE.persistList(itemlist);
+		//Item.printlistXSLT(itemlist, this, os, "/itemlist.xsl");
+	    Dao.INSTANCE.persistList(itemlist);
 
-
+	  // MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	  //  syncCache.clearAll();
+	    
+	    resp.sendRedirect("/catalogue");
 
 	} // end dopost
 

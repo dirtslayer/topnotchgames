@@ -27,10 +27,10 @@ td {
 }
 
 tr:nth-child(odd) {
-    background-color:#99c2ff ;
+    background-color:white;
 }
 tr:nth-child(even){
-	background-color: #c299ff;
+	background-color: #a8a887;
 }
 
 table {
@@ -67,13 +67,13 @@ body {
 }
 
 a {
-	color: red;
+	color: black;
 	text-decoration: none;
 }
 
 a:hover {
-	color: black;
-	background: white;
+	color: red;
+//	background: white;
 	text-decoration: none;
 	text-decoration: none;
 }
@@ -187,8 +187,8 @@ img {
 .col1 ul li {
 	list-style: none;
 	display : inline-block;
-	margin-right: 5em;
-	width: 15em;
+	//margin-right: 5em;
+	width: 12em;
 }
 
 

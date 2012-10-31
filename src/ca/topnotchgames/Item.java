@@ -4,9 +4,11 @@ package ca.topnotchgames;
 import java.io.File;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +23,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import net.sf.saxon.trans.XPathException;
 
@@ -38,11 +44,7 @@ public class Item implements Serializable {
 	private String category; // col 1
 	private String name; // col 3
 	private String price; // col 8
-	private String quantity; // col 20
-	private String imageurl;
-	private String notes;
-	
-	
+		
 	
 	static TransformerFactory factory = initfactory();
 	private static TransformerFactory initfactory(){
@@ -75,26 +77,48 @@ public class Item implements Serializable {
     @SuppressWarnings("rawtypes")
 	private static HashMap cache = new HashMap(20);
 	
-    public static void printlistXSLT(List<Item> il, GenericServlet host, ServletOutputStream out, String style) {
-		StringBuilder sb = new StringBuilder();
+    
+    
+    
+    public static String xsl(List<Item> il,GenericServlet host, String style) {
+    	
+    	
+    	
+    	String key = "xsl" + style;
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		syncCache.setErrorHandler(ErrorHandlers
+					.getConsistentLogAndContinue(Level.INFO));
+		String os = (String)syncCache.get(key);
+		if (os != null) {
+				return os;
+		}
+
+    	
+    	
+    	StringBuilder sb = new StringBuilder();
 		sb.append("<itemlist>");
 		for (Item i:il) {
 			sb.append("" + i.toXML() );
 		}
 		sb.append("</itemlist>");
-		
 		StringReader sr = new StringReader(sb.toString());
 		
-		  try {
+		StringWriter sw = new StringWriter();
+		javax.xml.transform.Result result = new javax.xml.transform.stream.StreamResult(sw);
+
+		
+		 try {
 	            Templates pss = tryCache(host, style);
 	            Transformer transformer = pss.newTransformer();
-	            transformer.transform(new StreamSource(sr), new StreamResult(out));
+	            transformer.transform(new StreamSource(sr), result);
 		  } catch (Exception e) {
 			 e.printStackTrace();
 		  }
-		
-		
-	}
+    	String toret = sw.getBuffer().toString();	
+    	syncCache.put(key, toret);
+    	return toret;
+    }
+    
 	
 	
 	
@@ -102,15 +126,13 @@ public class Item implements Serializable {
 	
 	
 	
-	public Item(String category2, String group2, String imageurl2,
-			String name2, String price2, String quantity2, String notes2) {
+	public Item(String category2, String group2, 
+			String name2, String price2 ) {
 		this.category = category2;
 		this.group = group2;
-		this.imageurl = imageurl2;
 		this.name = name2;
 		this.price = price2;
-		this.quantity = quantity2;
-		this.notes = notes2;
+		
 	}
 	
 	public static void printlistXML(LinkedList<Item> il, ServletOutputStream os) {
@@ -128,8 +150,7 @@ public class Item implements Serializable {
 	
 	public String toXML() {
 		return "<item><id>" + id + "</id><group>" + group + "</group><category>" + category + "</category><name>" +
-				name + "</name><price>" + price + "</price><quantity>" + quantity + "</quantity><imageurl>" +
-				imageurl + "</imageurl><notes>" + notes + "</notes></item>";
+				name + "</name><price>" + price + "</price> </item>";
 	}
 	
 	public Item() {
@@ -172,26 +193,6 @@ public void setPrice(String s) {
 		return this.price ;
 	}
 	
-public void setQuantity(String s) {
-		this.quantity = s;
-	}
-	public String getQuantity() {
-		return this.quantity;
-	}
-	
-public void setImageurl(String s) {
-		this.imageurl = s;
-	}
-	public String getImageurl () {
-		return this.imageurl ;
-	}
-	
-	public void setNotes(String s) {
-		this.notes = s;
-	}
-	public String getNotes () {
-		return this.notes ;
-	}
-	
+
 
 }
