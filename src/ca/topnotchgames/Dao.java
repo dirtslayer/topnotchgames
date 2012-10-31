@@ -28,7 +28,7 @@ public enum Dao {
 			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 			syncCache.setErrorHandler(ErrorHandlers
 						.getConsistentLogAndContinue(Level.INFO));
-			//serlist = (LinkedList<Item>) syncCache.get(key); // read from cache
+			serlist = (LinkedList<Item>) syncCache.get(key); // read from cache
 
 			if (serlist != null) {
 					return serlist;

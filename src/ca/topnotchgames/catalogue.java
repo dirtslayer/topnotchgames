@@ -23,7 +23,7 @@ public class catalogue extends HttpServlet {
 		// may want to parameterize category and pass that somehow ... 
 		//Item.printlistXSLT(il, this, os, "catalogue.xsl");
 		
-		os.print( Item.xsl(il, this, "catalogue.xsl") );
+		os.print( xsl.transform(il, this, "catalogue.xsl") );
 		
 	}
 	
