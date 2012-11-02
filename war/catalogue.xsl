@@ -5,7 +5,7 @@
 	xmlns:fb="http://ogp.me/ns/fb#"
    exclude-result-prefixes="xhtml"
 	>
-<xsl:output method="html" omit-xml-declaration="yes" >
+<xsl:output method="html" omit-xml-declaration="yes" indent="no" >
 
 </xsl:output>
 
@@ -52,6 +52,7 @@
 <a name="index" />
 <ul>
 <xsl:for-each select="/itemlist/item/group/text()[generate-id()=generate-id(key('group',.)[1])]">
+    <xsl:sort></xsl:sort>
     <li>
     	<xsl:element name="a">
     	<xsl:attribute name="href">#<xsl:value-of select="."/></xsl:attribute>
@@ -63,6 +64,7 @@
 </ul>
 
 <xsl:for-each select="/itemlist/item/group/text()[generate-id()=generate-id(key('group',.)[1])]">
+<xsl:sort></xsl:sort>
 	<xsl:variable name="vgroup" select="." />
 	<xsl:element name="a">
 	<xsl:attribute name="name">
@@ -94,8 +96,8 @@
 
 <ul>
 <li>Email<br />
- oliver @ <br />
- topnotchgames.ca</li>				
+ topnotchgames @ <br />
+ yahoo.com</li>				
 
 </ul>
 
@@ -104,6 +106,7 @@
 <li><a href="/catalogue">catalogue</a></li>
 <li><a href="http://designr8.com">designr8.com</a></li>
 <li><a href="/gamefiler">game filer</a></li>
+<li><xsl:value-of select="count(//item)" /> items</li>
 
 </ul>
 
@@ -147,7 +150,8 @@
 </html>
 </xsl:template>	
 	
-<xsl:template match="itemlist/item">
+<xsl:template match="itemlist/item"><xsl:text>
+</xsl:text>
 <tr><td class="name"><xsl:element name="a"><xsl:attribute name="href">https://www.google.ca/search?q=<xsl:value-of select="name" />&amp;hl=en&amp;prmd=imvns&amp;source=lnms&amp;tbm=isch</xsl:attribute><xsl:value-of select="name" /></xsl:element></td><td class="price">$<xsl:value-of select="price" /></td></tr>
 </xsl:template>
 </xsl:stylesheet>

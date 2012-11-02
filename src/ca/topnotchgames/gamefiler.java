@@ -2,8 +2,20 @@ package ca.topnotchgames;
 
 
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+
+
+
+
 //servlet and java io
 import java.io.IOException;
+
+
+
 import java.io.PrintWriter;
 
 import java.util.LinkedList;
@@ -13,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 //appengine
@@ -107,13 +120,13 @@ public class gamefiler extends HttpServlet {
 			} else if (part.isFile()) {
 				FilePart filePart = (FilePart) part;
 				PartInputStream partInput = (PartInputStream) filePart.getInputStream();
-				long size=0;
+			//	long size=0;
 				int read;
 				byte[] buf = new byte[8 * 1024];
 				String bytein = null;
 
 				while((read =  partInput.read(buf)) != -1) {
-					size += read;
+			//		size += read;
 					bytein = new String(buf,0, read);
 					lines.append(bytein);
 				}
@@ -154,8 +167,6 @@ public class gamefiler extends HttpServlet {
 				col = line.substring(cstart,cend);
 				if (coln==0) {
 					newItem.setGroup(col);
-				} else if (coln==1) {
-					newItem.setCategory(escapeTags(col));
 				} else if (coln==3) {
 					newItem.setName(escapeTags(col));
 				} else if (coln==8) {
@@ -174,23 +185,46 @@ public class gamefiler extends HttpServlet {
 
 			} // end loop column
 			
-			if (quantity > 0) {
+			
+			boolean add = true; 
+			
+			if (    ( quantity < 1 ) ||
+					( newItem.getGroup().compareTo("Phone Cases and Accessories") == 0 ) ||		
+					( newItem.getGroup().compareTo("NEW Accessories") == 0 ) ||
+					( newItem.getGroup().compareTo("USED Accessories") == 0 ) ||
+					( newItem.getGroup().compareTo("USED Consoles") == 0 ) ||
+					( newItem.getGroup().compareTo("Keychains") == 0 ) ||
+					( newItem.getGroup().compareTo("NEW Accessories") == 0 ) ||
+					( newItem.getGroup().compareTo("NEW Consoles") == 0 )  )
+					{
+						add = false;
+					}
+		
+			if (add==true) {
 				itemlist.add(newItem);
 			}
-
+	
 			if (start >= lines.length()) break;
 		} // end loop input lines
 
-
-		//Item.printlistXML(itemlist, os);
 		
-		//Item.printlistXSLT(itemlist, this, os, "/itemlist.xsl");
-	    Dao.INSTANCE.persistList(itemlist);
+		String cataloguexsl = xsl.transform(itemlist, this, "catalogue.xsl");
+		Text dbcataloguexsl = new Text(cataloguexsl);
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-	  // MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-	  //  syncCache.clearAll();
-	    
-	    resp.sendRedirect("/catalogue");
+		Key catkey = KeyFactory.createKey("catalogue", "html");
+		Entity catalogue = new Entity(catkey);
+
+		catalogue.setProperty("html", dbcataloguexsl);
+		
+		datastore.put(catalogue);
+		
+		os.print(dbcataloguexsl.getValue());
+		
+		//Dao.INSTANCE.persistList(itemlist);
+
+	    //resp.sendRedirect("/catalogue");
 
 	} // end dopost
 
