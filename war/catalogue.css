@@ -66,6 +66,7 @@ body {
 	font-style: italic;
 }
 
+
 a {
 	color: black;
 	text-decoration: none;
@@ -182,6 +183,17 @@ img {
 	list-style: none;
 	line-height: 2em;
 	padding-top: 4em;
+}
+
+.disclaimer {
+	font-size:80%;
+	line-height: 1em;
+}
+.col2 li:nth-child(odd) {
+    background-color:white;
+}
+.col2 li:nth-child(even){
+	background-color: #a8a887;
 }
 
 .col1 ul li {

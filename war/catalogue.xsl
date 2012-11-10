@@ -96,18 +96,22 @@
 
 <ul>
 <li>Email<br />
- topnotchgames @ <br />
- yahoo.com</li>				
-
+ topnotchgames<br/>
+ @yahoo.com</li>				
 </ul>
 
 <ul >
 <li><a href="/">Home</a></li>
-<li><a href="/catalogue">catalogue</a></li>
-<li><a href="http://designr8.com">designr8.com</a></li>
-<li><a href="/gamefiler">game filer</a></li>
+
+
 <li><xsl:value-of select="count(//item)" /> items</li>
 
+</ul>
+<ul class="disclaimer">
+<li class="disclaimer">new games will be available on the official release date</li>
+<li class="disclaimer">Please call to confirm availability of a specific game</li>
+<li class="disclaimer"><a href="http://designr8.com">designr8.com</a></li>
+<li class="disclaimer"><a href="/gamefiler">game filer</a></li>
 </ul>
 
 
