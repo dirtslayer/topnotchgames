@@ -8,6 +8,18 @@
 		<url-pattern>/tng</url-pattern>
 	</servlet-mapping>
 	
+	
+		<servlet>
+		<servlet-name>newfiler</servlet-name>
+		<servlet-class>ca.topnotchgames.newfiler</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>newfiler</servlet-name>
+		<url-pattern>/newfiler</url-pattern>
+	</servlet-mapping>
+	
+	
+	
 	<servlet>
 		<servlet-name>gamefiler</servlet-name>
 		<servlet-class>ca.topnotchgames.gamefiler</servlet-class>

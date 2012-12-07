@@ -25,7 +25,14 @@ public class xsl {
 			sb.append("" + i.toXML() );
 		}
 		sb.append("</itemlist>");
-		StringReader sr = new StringReader(sb.toString());
+		
+		return transform(sb.toString(), host, style);
+	}
+
+
+	public static String transform(String xml,GenericServlet host, String style) {
+
+		StringReader sr = new StringReader(xml);
 
 		StringWriter sw = new StringWriter();
 		javax.xml.transform.Result result = new javax.xml.transform.stream.StreamResult(sw);
@@ -44,7 +51,9 @@ public class xsl {
 		return toret;
 	}
 
-
+	
+	
+	
 	static TransformerFactory factory = initfactory();
 	private static TransformerFactory initfactory(){
 		System.setProperty("javax.xml.transform.TransformerFactory",
