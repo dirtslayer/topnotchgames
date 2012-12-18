@@ -94,6 +94,42 @@
 		<div class="col2">
 					
 
+
+<div class="ad">
+	<script type="text/javascript">
+		<xsl:comment>
+			google_ad_client = "ca-pub-7326905713177295";
+			/* designr8 */
+			google_ad_slot = "1639107101";
+			google_ad_width = 250;
+			google_ad_height = 250;
+			//
+		</xsl:comment>
+	</script>
+	<script type="text/javascript"
+		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+</div>
+	<div class="ad">
+		<script type="text/javascript">
+			<xsl:comment>
+				google_ad_client = "ca-pub-7326905713177295";
+				/* designr8 two */
+				google_ad_slot = "1577198311";
+				google_ad_width = 250;
+				google_ad_height = 250;
+				//
+			</xsl:comment>
+		</script>
+		<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+	</div>
+
+
+
+
+
 <ul>
 <li>Email<br />
  topnotchgames<br/>
