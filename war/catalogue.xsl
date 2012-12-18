@@ -17,7 +17,7 @@
 </xsl:text>
 <html>
 <head>
-<title>TNG Catalogue</title>
+<title> TNG Catalogue</title>
 <link rel="stylesheet" type="text/css" href="catalogue.css" />
 <link href="http://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet" type="text/css"/>
 </head>
